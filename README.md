@@ -1,37 +1,44 @@
-# TinySoundFont
-SoundFont2 synthesizer library in a single C/C++ file
+# sf2mid: TinySoundFont-based midi player using soundfont2 banks
 
-## Overview
+## Usage
 
-TinySoundFont is a software synthesizer using SoundFont2 sound bank files.
+Recommended soundfont: Patch93's Roland SC55 font.
 
-The library is a single C header file so it is extremely simple to integrate in your C/C++ projects.
+Example usage: playing a doom midi file
 
-```c++
-#define TSF_IMPLEMENTATION
-#include "tsf.h"
+	; games/wadfs /sys/games/lib/doom/doom1.wad
+	createfile SW18_7: file already exists
+	; sf2mid /lib/midi/sf2/patch93.sc-55.sf2 d_messag.mid >/dev/audio
+	; games/mus </mnt/wad/d_e1m3 \
+		| sf2mid /lib/midi/sf2/patch93.sc-55.sf2 >/dev/audio
 
-...
+See: [mus(1)](http://man.9front.org/1/mus).
 
-tsf* TinySoundFont = tsf_load_filename("soundfont.sf2");
-tsf_set_output(TinySoundFont, TSF_MONO, 44100, 0); //sample rate
-tsf_note_on(TinySoundFont, 0, 60, 1.0f); //preset 0, middle C
-short HalfSecond[22050]; //synthesize 0.5 seconds
-tsf_render_short(TinySoundFont, HalfSecond, 22050, 0);
-```
+Example usage: using sf2mid for playback in doom(1):
 
-The library code is based on [SFZero by Steve Folta](https://github.com/stevefolta/SFZero).
+	Edit dmus(1):
+	; cat /bin/dmus
+	#!/bin/rc
+	#sf2=sc55.v3.7.sf2
+	sf2=patch93.sc-55.sf2
+	if(test -f /lib/midi/sf2/$sf2)
+		c=(sf2mid /lib/midi/sf2/$sf2)
+	if not if(test -f /tmp/genmidi.*)
+		c=(games/dmid -i /tmp/genmidi.* '|' games/opl3)
+	if not
+		c=(games/midi -c)
+	if(~ `{file -m $1} audio/mus)
+		c=(games/mus '<' $1 '|' $c)
+	if not
+		c=('<' $1 $c)
+	eval $c
 
-## Documentation
+Current port-specific issues: performance is not great;
+doom will hang while sf2mid unscrews itself.
 
-The API documentation can be found on [top of the library source code](https://github.com/schellingb/TinySoundFont/blob/master/tsf.h).
+## Library
 
-There are also [examples available](https://github.com/schellingb/TinySoundFont/tree/master/examples) which come with a sample SoundFont file and build and play sound on Win32, Win64, Linux and MacOSX with no further dependencies.
+See [TinySoundFont library](https://github.com/schellingb/TinySoundFont)
+for more information.
 
-## Dependencies
-
-C standard libraries for fopen, math and malloc (can be removed by providing custom functions with #defines).
-
-## License
-
-TinySoundFont is available under the [MIT license](https://choosealicense.com/licenses/mit/).
+License: MIT
