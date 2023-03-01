@@ -8,7 +8,6 @@ Example usage: playing a doom midi file
 
 	; games/wadfs /sys/games/lib/doom/doom1.wad
 	createfile SW18_7: file already exists
-	; sf2mid /lib/midi/sf2/patch93.sc-55.sf2 d_messag.mid >/dev/audio
 	; games/mus </mnt/wad/d_e1m3 \
 		| sf2mid /lib/midi/sf2/patch93.sc-55.sf2 >/dev/audio
 
