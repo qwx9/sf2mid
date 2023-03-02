@@ -9,7 +9,7 @@ Example usage: playing a doom midi file
 	; games/wadfs /sys/games/lib/doom/doom1.wad
 	createfile SW18_7: file already exists
 	; games/mus </mnt/wad/d_e1m3 \
-		| sf2mid /lib/midi/sf2/patch93.sc-55.sf2 >/dev/audio
+		| games/sf2mid /lib/midi/sf2/patch93.sc-55.sf2 >/dev/audio
 
 See: [mus(1)](http://man.9front.org/1/mus).
 
@@ -21,7 +21,7 @@ Example usage: using sf2mid for playback in doom(1):
 	#sf2=sc55.v3.7.sf2
 	sf2=patch93.sc-55.sf2
 	if(test -f /lib/midi/sf2/$sf2)
-		c=(sf2mid /lib/midi/sf2/$sf2)
+		c=(games/sf2mid /lib/midi/sf2/$sf2)
 	if not if(test -f /tmp/genmidi.*)
 		c=(games/dmid -i /tmp/genmidi.* '|' games/opl3)
 	if not
